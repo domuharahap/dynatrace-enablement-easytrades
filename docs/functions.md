@@ -259,7 +259,7 @@ deleteKindCluster   # destructive, removes the cluster
 ```bash
 waitForPod dynatrace activegate
 waitForAllPods dynatrace
-waitForAllReadyPods hipstershop
+waitForAllReadyPods dynatrace
 waitAppCanHandleRequests 8080 20   # port 8080, 20 retries
 ```
 
@@ -316,10 +316,9 @@ Available apps:
 | 2 | b | astroshop | ✅ | ❌ |
 | 3 | c | bugzapper | ✅ | ✅ |
 | 4 | d | easytrade | ✅ | ❌ |
-| 5 | e | hipstershop | ✅ | ❌ |
-| 6 | f | todoapp | ✅ | ✅ |
-| 7 | g | unguard | ✅ | ❌ |
-| 8 | h | opentelemetry-demo | ✅ | ✅ |
+| 5 | e | todoapp | ✅ | ✅ |
+| 6 | f | unguard | ✅ | ❌ |
+| 7 | g | opentelemetry-demo | ✅ | ✅ |
 
 ### Individual Deploy Functions
 
@@ -330,7 +329,6 @@ Available apps:
 | `deployAstroshop` | Deploys the Dynatrace-curated Astroshop; requires `DT_INGEST_TOKEN` |
 | `deployBugZapperApp` | Deploys the BugZapper browser game |
 | `deployEasyTrade` | Deploys the EasyTrade demo application |
-| `deployHipsterShop` | Deploys the HipsterShop microservices demo |
 | `deployUnguard` | Deploys Unguard (intentionally vulnerable app, for security demos) |
 | `undeployUnguard` | Removes Unguard and its MariaDB |
 | `deployOpentelemetryDemo` | Deploys the CNCF OpenTelemetry Demo (upstream, community-maintained) |

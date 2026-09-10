@@ -2713,27 +2713,6 @@ deployEasyTrade() {
   registerApp "easytrade" "easytrade" "frontendreverseproxy-easytrade" 80
 }
 
-# deploy hipstershop from manifests
-deployHipsterShop() {
-  [ -z "$FRAMEWORK_APPS_PATH" ] && { echo "❌ source_framework.sh not loaded — run 'source .devcontainer/util/source_framework.sh' first"; return 1; }
-  
-  printInfoSection "Deploying HipsterShop"
-  
-  if [[ "$ARCH" != "x86_64" ]]; then
-    printWarn "This version of the Hipstershop only supports AMD/x86 architectures and not ARM, exiting deployment..."
-    return 1
-  fi
-
-  kubectl create namespace hipstershop 2>/dev/null || true
-
-  printInfo "Deploying hipstershop manifests"
-  kubectl apply -f $FRAMEWORK_APPS_PATH/hipstershop/manifests -n hipstershop
-
-  printInfo "Waiting for all pods to start"
-  waitForAllPods hipstershop
-
-  registerApp "hipstershop" "hipstershop" "frontend-external" 80
-}
 
 deployUnguard(){
 
@@ -2953,17 +2932,7 @@ deployApp(){
       fi
       ;;
 
-    5 | e | hipstershop)
-       if [[ $delete ]]; then
-        printInfo "Undeploying hipstershop..."
-        unregisterApp "hipstershop" "hipstershop"
-        kubectl delete ns hipstershop --force
-      else
-        deployHipsterShop
-      fi
-      ;;
-
-    6 | f | todoapp)
+    5 | e | todoapp)
        if [[ $delete ]]; then
         printInfo "Undeploying todoapp..."
         unregisterApp "todoapp" "todoapp"
@@ -2973,7 +2942,7 @@ deployApp(){
       fi
       ;;
 
-    7 | g | unguard)
+    6 | f | unguard)
        if [[ $delete ]]; then
         printInfo "Undeploying unguard..."
         unregisterApp "unguard" "unguard"
@@ -2983,21 +2952,12 @@ deployApp(){
       fi
       ;;
 
-    8 | h | opentelemetry-demo | otel-demo)
+    7 | g | opentelemetry-demo | otel-demo)
        if [[ $delete ]]; then
         printInfo "Undeploying opentelemetry-demo..."
         undeployOpentelemetryDemo
       else
         deployOpentelemetryDemo
-      fi
-      ;;
-
-    9 | i | dtpay)
-      if [[ $delete ]]; then
-        printInfo "Undeploying dtpay..."
-        undeployDtpay
-      else
-        deployDtpay
       fi
       ;;
 
@@ -3024,14 +2984,11 @@ showDeployAppUsage(){
   printInfo "[2]   b   astroshop             +       -                                   "
   printInfo "[3]   c   bugzapper             +       +                                   "
   printInfo "[4]   d   easytrade             +       -                                   "
-  printInfo "[5]   e   hipstershop           +       -                                   "
-  printInfo "[6]   f   todoapp               +       +                                   "
-  printInfo "[7]   g   unguard               +       -                                   "
-  printInfo "[8]   h   opentelemetry-demo    +       +    (CNCF upstream)                "
-  printInfo "[9]   i   dtpay                +       +    (dtdemo-usecase, port 8080)    "
+  printInfo "[5]   e   todoapp               +       +                                   "
+  printInfo "[6]   f   unguard               +       -                                   "
+  printInfo "[7]   g   opentelemetry-demo    +       +    (CNCF upstream)                "
   printInfo "----------------------------------------------------------------------------"
   printInfo "Astroshop = Dynatrace-curated demo | OpenTelemetry Demo = CNCF upstream    "
-  printInfo "JMeter load test: runJmeterTest (targets dtpay) | stop: stopJmeterTest     "
 }
 
 deleteCache(){
