@@ -1,62 +1,89 @@
---8<-- "snippets/dt-enablement.md"
+# Dynatrace Observability Workshop — EasyTrade
 
-
-!!! example ""
-    ![run codespace](img/framework_banner.png){ align=center ; } 
-
-## 📊 Project Goals
-
-
-??? tip "Framework Objective"
-    **Reduce complexity, remove friction, and increase adoption of the Dynatrace Platform.**
-
-    The Dynatrace Enablement Framework is a structured set of tools and best practices designed to streamline the delivery, maintenance, and scaling of solutions across the Dynatrace Platform. The primary goal is to drive platform adoption by ensuring consistent training, comprehensive solution coverage, and operational efficiency.
-
-    Trainings are delivered as GitHub Codespaces—publicly accessible, environment-agnostic, and built to a defined set of standards for quality, repeatability, and team alignment.
-
-
-## <img src="https://cdn.bfldr.com/B686QPH3/at/w5hnjzb32k5wcrcxnwcx4ckg/Dynatrace_signet_RGB_HTML.svg?auto=webp&format=pngg" alt="DT logo" width="22"> Dynatrace Enablement Framework in a Nutshell
-
-
-The Dynatrace Enablement Framework simplifies the delivery of demos and hands-on trainings for the Dynatrace Platform. It provides a unified set of tools, templates, and best practices to ensure enablements are easy to create, run anywhere, and maintain over time.
-
-### ✅ Key Features
-
-- **GitHub-Hosted & Versioned**  
-  All trainings are managed in GitHub repositories, ensuring traceability and collaboration.
-
-- **Self-Service Documentation**  
-  Each repo includes its own MkDocs-powered documentation, published via GitHub Pages.
-
-- **Universal Base Image**  
-  A Docker image supports AMD/ARM architectures, GitHub Codespaces, VS Code Dev Containers, and containerized execution in any Ubuntu OS.
-
-- **Separation of Concerns**  
-  Modular design allows repo-specific logic without impacting the core framework.
-
-- **Automated Testing**  
-  GitHub Actions enable end-to-end integration tests for all trainings.
-
-- **Monitoring & Analytics**  
-  Usage and adoption are tracked with Dynatrace for continuous improvement.
-
-- **Rapid Training Creation**  
-  Templates and automation help trainers launch new enablement content quickly.
-
-- **Centralized Maintenance**  
-  The Codespaces Synchronizer tool keeps all repositories up to date with the latest framework changes.
+Welcome to the **Dynatrace Observability Workshop** built around [EasyTrade](https://github.com/Dynatrace/easytrade){target=_blank}, a realistic microservices trading application designed for hands-on observability practice. Over the course of this workshop you will deploy EasyTrade on Kubernetes, instrument it with Dynatrace OneAgent, and work through three real-world use cases that demonstrate how Dynatrace detects, diagnoses, and explains production problems.
 
 ---
 
+## What you will learn
 
-### 🤲 Benefits
-- Reduces complexity and friction for trainers and learners
-- Increases adoption and consistency
-- Scales across internal, partner, and customer enablement a Kubernetes cluster.
+- How to deploy the **Dynatrace Kubernetes Operator** and instrument a cluster with **CloudNative FullStack** monitoring
+- How to explore **EasyTrade microservices** observability — topology, services, pods, distributed traces, and logs — from a single pane of glass
+- How to perform **root-cause analysis** using distributed traces, service maps, and database query analytics
+- How **Davis AI** automatically detects anomalies, correlates impacted services, and produces a causal explanation
+- How to build **DQL dashboards** in Dynatrace Grail for infrastructure and application health
 
-### 📞 Support Policy 
---8<-- "snippets/disclaimer.md"
+---
+
+## Application architecture
+
+EasyTrade is a polyglot microservices application that simulates a financial trading platform. It is deployed entirely on Kubernetes and monitored end-to-end by Dynatrace OneAgent.
+
+### Services and technology stack
+
+| Service | Language / Technology | Role |
+|---|---|---|
+| **Proxy / Nginx** | Nginx | Reverse proxy and ingress |
+| **Frontend** | React (Node.js) | Single-page web application |
+| **BrokerService** | .NET Core (C#) | Trade execution and routing |
+| **Engine** | Java | Trade matching engine |
+| **Manager** | Java | Order lifecycle management |
+| **PricingService** | Java | Real-time instrument pricing |
+| **LoginService** | .NET Core (C#) | Authentication and sessions |
+| **AccountService** | Golang | Account and balance management |
+| **OfferService** | Java | Instrument offer catalogue |
+| **CreditCardOrderService** | Java | Credit card payment flow |
+| **CalculationService** | C++ | Low-level financial calculations |
+| **AggregatorService** | Java | Data aggregation layer |
+| **ThirdPartyService** | Node.js | Simulated external integrations |
+| **ContentCreator** | Python | Background data seeder |
+| **Headless load generator** | Node.js | Synthetic load (Playwright) |
+| **FlagController** | OpenFeature / flagd | Feature flag management |
+| **RabbitMQ** | RabbitMQ | Async messaging between services |
+| **MSSQL** | Microsoft SQL Server | Relational database |
+
+### Architecture diagram
+
+```
+Browser
+  └─► Nginx Proxy
+         ├─► React Frontend
+         └─► BrokerService (.NET)
+                  ├─► Engine (Java)       ──► MSSQL
+                  ├─► Manager (Java)      ──► MSSQL
+                  ├─► PricingService      ──► RabbitMQ
+                  ├─► OfferService
+                  ├─► LoginService (.NET)
+                  ├─► AccountService (Go)
+                  └─► FlagController (flagd)
+```
+
+---
+
+## How Dynatrace ingests data
+
+Dynatrace **OneAgent** is deployed as a DaemonSet on every Kubernetes node. It auto-instruments each container without any code changes.
+
+```
+OneAgent (DaemonSet on each node)
+  │
+  ├── Topology discovery    ──► Smartscape / Entity Model
+  ├── Distributed traces    ──► PurePath / Grail Trace store
+  ├── Metrics               ──► Grail Metrics store
+  ├── Logs                  ──► Grail Log store
+  └── Business events       ──► Grail BizEvents store
+                                        │
+                              Dynatrace SaaS Tenant
+                              (Notebooks, Dashboards,
+                               Davis AI, DQL)
+```
+
+Data flows from OneAgent through the **Dynatrace ActiveGate** into **Grail**, Dynatrace's unified data lakehouse. All analysis — including Davis AI root-cause detection and DQL queries — operates directly on Grail-stored data with no data movement required.
+
+---
+
+!!! info "Workshop duration"
+    This workshop is designed to be completed in **2–3 hours**. Each section builds on the previous one, so please follow the steps in order.
 
 <div class="grid cards" markdown>
-- [Yes! let's begin :octicons-arrow-right-24:](container-image.md)
+- [Pre-requisites :octicons-arrow-right-24:](pre-requisites.md)
 </div>

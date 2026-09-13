@@ -1,24 +1,17 @@
 INHERIT: mkdocs-base.yaml
-site_name: "Dynatrace Enablement Framework"
+site_name: "Dynatrace Observability Workshop — EasyTrade"
 repo_name: "View Code on GitHub"
 repo_url: "https://github.com/dynatrace-wwse/codespaces-framework"
 nav:
-  - '1. Introduction': index.md
-  - '2. Container image': container-image.md
-  - '3. Instantiation types': instantiation-types.md
-  - '4. Dynatrace integration': dynatrace-integration.md
-  - '5. Codespaces Template': template.md
-  - '6. The Framework': framework.md
-  - '7. User Experience': user-experience.md
-  - "8. Synchronizer": synchronizer.md
-  - "9. Testing": testing.md
-  - "10. Monitoring": monitoring.md
-  - "11. Functions Reference": functions.md
-  - "12. Versioning Policy": versioning.md
-  - "13. Resources": resources.md
-  - "14. Repositories": enablements.md
-  - "15. Orbital — Ops Platform": ops-platform.md
-  - "16. Enablement App": enablement-app.md
-  - "17. What's next?": whats-next.md
+  - 'Welcome': index.md
+  - 'Pre-requisites': pre-requisites.md
+  - '1. Dynatrace Operator & Agent': setup-dynatrace.md
+  - '2. EasyTrade Installation': setup-easytrade.md
+  - '3. Platform Walkthrough': platform-walkthrough.md
+  - '4. Use Case 1 — DB Not Responding': usecase1-db-not-responding.md
+  - '5. Use Case 2 — High CPU Usage': usecase2-high-cpu.md
+  - '6. Use Case 3 — Dashboarding': usecase3-dashboarding.md
+  - 'Cleanup': cleanup.md
+  - 'References': references.md
 extra:
   rum_snippet: "https://js-cdn.dynatrace.com/jstag/1612cf70810/bf81393wlb/ff78563295ff1e42_complete.js"
