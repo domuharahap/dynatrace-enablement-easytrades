@@ -62,6 +62,7 @@ Before injecting the failure, record the healthy state of BrokerService.
     Field 'cpu' in 'resources/limits' for container 'broker-service'
     changed from '600m' to '300m'
     ```
+![Problem CPU High](./img/cpu_brokerservice.png)
 
 !!! warning "Double impact"
     Two things happen simultaneously when this flag is enabled:
@@ -86,6 +87,8 @@ Before injecting the failure, record the healthy state of BrokerService.
     Workload spec change — cpu limit: 600m → 300m
     ```
 
+![Problem CPU High](./img/brokerservice_cpu_infra.png)
+
 !!! info "What CPU throttling means"
     When a container exceeds its Kubernetes `resources.limits.cpu`, the Linux kernel throttles the process using CFS (Completely Fair Scheduler). The container does not crash, but it runs at reduced speed — causing every request to take longer. This is invisible without infrastructure-level observability.
 
@@ -100,6 +103,8 @@ Before injecting the failure, record the healthy state of BrokerService.
     - `Problems P-260842 "Multiple service problems"`
     - `Problems P-260848 "Response time degradation"`
 5. Click one of these recommended queries to run it and see all log entries correlated to that specific problem.
+
+![Problem CPU High Logs](./img/brokerservice_cpu_logs.png)
 
 !!! tip "Davis AI and Kubernetes events"
     Dynatrace Davis AI automatically links the Kubernetes `WorkloadSpecChange` event to the observed performance degradation. This means the problem card will show the CPU limit change as a contributing factor, even though it originated as a Kubernetes resource update rather than an application error.
