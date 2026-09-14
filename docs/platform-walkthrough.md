@@ -6,7 +6,7 @@ Before jumping into the use cases, spend a few minutes familiarising yourself wi
 
 ## Step 1 — Kubernetes Explorer
 
-1. In your Dynatrace tenant, navigate to **Infrastructure > Kubernetes > Explorer** (left-side menu or global search).
+1. In your Dynatrace tenant, navigate to **Kubernetes Apps > Explorer** (left-side menu or global search).
 2. Use the **Cluster** filter at the top to select your cluster.
 3. The overview cards show:
     - **Nodes** — count and health
@@ -15,6 +15,8 @@ Before jumping into the use cases, spend a few minutes familiarising yourself wi
     - **Pods** — total and running count
     - **Containers** — total running containers
 4. Click **"View topology"** (top-right) to switch to the visual topology graph.
+
+![explore k8s deployment](./img/explore_k8s_deployment.png)
 
 !!! info "Cluster health indicator"
     A green cluster indicator means all nodes are `Ready` and no Kubernetes-level problems are detected by Davis AI. Yellow or red indicates node pressure, OOMKill events, or scheduling failures.
@@ -35,6 +37,8 @@ The topology view (Smartscape) renders the full Kubernetes hierarchy. Each layer
 | Container | `dt.entity.container_group_instance` |
 | Service | `dt.entity.service` (auto-detected from OneAgent) |
 
+![k8s topology](./img/k8s_topology.png)
+
 Click any entity to open its details panel on the right. You can navigate up and down the hierarchy by clicking parent/child links.
 
 ---
@@ -47,6 +51,8 @@ Click any entity to open its details panel on the right. You can navigate up and
 4. Click **`easytrade-frontend`** to open the workload detail panel.
 5. Note the **Labels** section (e.g., `app: easytrade-frontend`, `version: 1.5.x`) — Dynatrace uses these for entity naming and grouping.
 6. Click **"Open in Services"** to jump directly to the auto-detected Service entity for this workload.
+
+![k8s topology](./img/k8s_services.png)
 
 !!! tip "Namespace filtering"
     The namespace filter is persistent within a session. If you cannot see EasyTrade workloads, confirm the namespace filter is set to `easytrade` and that OneAgent has been running for at least 3 minutes.
@@ -66,6 +72,8 @@ Click any entity to open its details panel on the right. You can navigate up and
     - **Failure rate** chart — percentage of HTTP requests returning 4xx/5xx
     - **Throughput** chart — requests per minute
 6. Click **"View traces"** (top-right of the chart area) to open the Distributed Tracing view for this service.
+
+![k8s topology](./img/services_explorer.png)
 
 !!! note "Baseline values"
     Record the current (healthy) values for BrokerService:
@@ -95,6 +103,8 @@ Click any entity to open its details panel on the right. You can navigate up and
     - HTTP status code
     - Number of spans
 5. Click any trace to open the **waterfall view** — a full span tree showing every service call in the trace.
+
+![k8s topology](./img/dt_distributed_tracing.png)
 
 !!! tip "Recording a baseline"
     Before injecting any failures, note the current error rate and p90 response time shown in the timeseries. Take a screenshot if helpful. This becomes your baseline for comparing the impact of each use case.

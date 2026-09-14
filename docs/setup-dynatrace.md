@@ -2,6 +2,8 @@
 
 The **Dynatrace Kubernetes Operator** manages the lifecycle of Dynatrace components inside your cluster. In **CloudNative FullStack** mode it automatically injects the OneAgent into every pod, captures distributed traces, metrics, logs, and topology — all without code changes.
 
+![Dynatrace Operator on k8s](./img/dt_operator.png)
+
 We have simplify the Dynatrace agent installation for kubernetes instrumentation, you can refere to documentation here just in case you want know more details: [K8s Manual Intrumentation](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/deployment)
 
 ---

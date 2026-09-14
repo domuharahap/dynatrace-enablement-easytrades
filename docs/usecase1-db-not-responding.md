@@ -22,6 +22,8 @@ In this use case you will inject a database failure using a feature flag, observ
 6. Click **Save**.
 7. Wait **2–3 minutes** for the failure to propagate and for Dynatrace to detect the anomaly.
 
+![Feature Flag](./img/easytrade_feature_flag.png)
+
 !!! tip "Alternative — curl"
     ```bash
     curl -X PUT "${EASYTRADE_URL}/feature-flag-service/v1/flags/db_not_responding" \
@@ -41,6 +43,8 @@ In this use case you will inject a database failure using a feature flag, observ
     - HTTP error count shown in **red** in the throughput area
     - Response time increasing
 
+![Frontend Services](./img/dt_frontend_services.png)
+
 !!! note "Why :8080?"
     The :8080 service is the first service in the call chain reached by external traffic. Its failure rate is the first visible symptom from the end-user perspective.
 
@@ -58,6 +62,8 @@ In this use case you will inject a database failure using a feature flag, observ
     ```
 3. Note the **red error indicator** on the BrokerService node — this identifies it as the propagation point.
 
+![Frontend Services](./img/dt_frontend_services_map.png)
+
 ---
 
 ## Step 4 — BrokerService deep dive
@@ -69,6 +75,8 @@ In this use case you will inject a database failure using a feature flag, observ
     - `easytrade-feature-flag-service` — flag evaluation
     - `easytrade-pricing-service` — pricing lookup
 4. Expand each call group to see individual endpoint patterns and their error counts.
+
+![Brokerservices Map](./img/dt_brokerservice_map.png)
 
 ---
 
@@ -87,6 +95,8 @@ In this use case you will inject a database failure using a feature flag, observ
     - Average response time: **3.17 ms** (fast, but always failing)
 5. Click the query to see the full SQL text and the error message associated with it.
 
+![Brokerservice query](./img/brokerservice_dbquery.png)
+
 !!! warning "The clue is here"
     The `INSERT INTO` statement is failing because `IDENTITY_INSERT` is set to OFF in the database, but the application is trying to supply an explicit value for the identity column. This is the root cause.
 
@@ -100,6 +110,8 @@ In this use case you will inject a database failure using a feature flag, observ
     - Problem ID (e.g., `P-26094070`)
 3. Click **Analyze** on the alert to open the full problem context.
 
+![Brokerservice alert](./img/brokerservice_alert.png)
+
 ---
 
 ## Step 7 — Problem summary
@@ -112,6 +124,8 @@ In this use case you will inject a database failure using a feature flag, observ
     - **:8080** — user-visible failure surface
 4. The **Root cause** box highlights TradeManagement with its exact error rate percentage.
 
+![dt problem card](./img/dt_problem.png)
+
 ---
 
 ## Step 8 — Logs from the problem
@@ -123,6 +137,8 @@ In this use case you will inject a database failure using a feature flag, observ
     Error while saving changes: An error occurred while saving the entity changes.
     ```
 4. The logger source is `EasyTrade.BrokerService.BrokerDbContext` — the Entity Framework database context.
+
+![dt problem card](./img/problem_logs.png)
 
 ---
 
@@ -139,6 +155,8 @@ In this use case you will inject a database failure using a feature flag, observ
     - **7 Logs** — correlated log entries for this exact trace
     - **3 Exceptions** — unhandled exceptions captured in the spans
 
+![dt problem traces](./img/problem_traces.png)
+
 ---
 
 ## Step 10 — Exceptions — root cause confirmed
@@ -152,6 +170,8 @@ In this use case you will inject a database failure using a feature flag, observ
     ```
 3. The stack trace shows the exception originating in `EasyTrade.BrokerService.ExceptionHandling`.
 4. Note the **Deployment release version** shown in the trace context: `1.5.9`.
+
+![Problem Traces exceptions](./img/problem_traces_exception.png)
 
 !!! tip "Why this matters"
     This exception is the definitive root cause. Without distributed tracing, a developer would only see a generic 503 at the Nginx layer and would have to correlate logs manually across multiple services. Dynatrace surfaces the exact SQL exception with its full stack trace in a single click.
@@ -171,6 +191,8 @@ In this use case you will inject a database failure using a feature flag, observ
         ```
         :8080  ──►  BrokerService  ──►  TradeManagement (root cause)
         ```
+
+![Problem Dynatrace Assist](./img/problem_genAI.png)
 
 ---
 
