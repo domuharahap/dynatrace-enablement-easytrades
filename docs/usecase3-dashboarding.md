@@ -7,6 +7,8 @@
 
 In this use case you will create a five-tile dashboard using a mix of hand-authored DQL, metrics queries, log queries, and AI-generated prompts.
 
+![Problem CPU High Logs](./img/dashboard_excercise1.png)
+
 ---
 
 ## Step 1 — Create a new dashboard
