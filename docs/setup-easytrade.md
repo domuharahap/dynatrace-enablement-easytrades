@@ -4,44 +4,12 @@ EasyTrade is a fully containerised microservices application that runs entirely 
 
 ---
 
-## Step 1 — Clone the EasyTrade repository
+## Step 1 — Deploy EasyTrade
+
+The repository has build-in and clone inside this codespaces. Run and apply command below to deploy the EasyTrade application into the k8s tenant.
 
 ```bash
-git clone https://github.com/Dynatrace/easytrade.git
-cd easytrade
-```
-
-The repository contains Kubernetes manifests in the `kubernetes-manifests/` directory and Helm charts in `chart/`.
-
----
-
-## Step 2 — Create the `easytrade` namespace
-
-```bash
-kubectl create namespace easytrade
-```
-
----
-
-## Step 3 — Deploy EasyTrade
-
-### Option A — kubectl (recommended for workshops)
-
-Apply all Kubernetes manifests at once from the repository:
-
-```bash
-kubectl apply -f kubernetes-manifests/ -n easytrade
-```
-
-This creates Deployments, Services, ConfigMaps, and the flagd (FlagController) deployment for all EasyTrade components.
-
-### Option B — Helm
-
-```bash
-helm install easytrade ./chart \
-  --namespace easytrade \
-  --create-namespace \
-  --wait
+deployEasyTrade
 ```
 
 !!! note "Image pull time"
@@ -99,41 +67,9 @@ kubectl get svc easytrade-feature-flag-service -n easytrade
 
 ---
 
-## Step 6 — Get the EasyTrade external URL
+## Step 6 — Get the EasyTrade external URL & Verify EasyTrade in the browser
 
-### If using a LoadBalancer service (cloud clusters)
-
-```bash
-kubectl get svc nginx -n easytrade
-```
-
-The `EXTERNAL-IP` column shows the URL once provisioned (may take 1–2 minutes on cloud providers).
-
-```
-NAME    TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
-nginx   LoadBalancer   10.100.x.xxx   34.xx.xx.xx      80:30080/TCP   5m
-```
-
-Set an environment variable for convenience:
-
-```bash
-export EASYTRADE_URL="http://$(kubectl get svc nginx -n easytrade -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-echo $EASYTRADE_URL
-```
-
-### If using port-forward (local clusters)
-
-```bash
-kubectl port-forward svc/nginx 8080:80 -n easytrade
-```
-
-Then open `http://localhost:8080` in your browser.
-
----
-
-## Step 7 — Verify EasyTrade in the browser
-
-Open `$EASYTRADE_URL` in your browser. You should see the EasyTrade trading dashboard with:
+The `EXTERNAL-IP` of the codespace available under the `View > Port`. Click the world icon or link to open in your browser. You should see the EasyTrade trading dashboard with:
 
 - A header showing the EasyTrade logo and navigation
 - A list of available trading instruments

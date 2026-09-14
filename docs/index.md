@@ -20,26 +20,9 @@ EasyTrade is a polyglot microservices application that simulates a financial tra
 
 ### Services and technology stack
 
-| Service | Language / Technology | Role |
-|---|---|---|
-| **Proxy / Nginx** | Nginx | Reverse proxy and ingress |
-| **Frontend** | React (Node.js) | Single-page web application |
-| **BrokerService** | .NET Core (C#) | Trade execution and routing |
-| **Engine** | Java | Trade matching engine |
-| **Manager** | Java | Order lifecycle management |
-| **PricingService** | Java | Real-time instrument pricing |
-| **LoginService** | .NET Core (C#) | Authentication and sessions |
-| **AccountService** | Golang | Account and balance management |
-| **OfferService** | Java | Instrument offer catalogue |
-| **CreditCardOrderService** | Java | Credit card payment flow |
-| **CalculationService** | C++ | Low-level financial calculations |
-| **AggregatorService** | Java | Data aggregation layer |
-| **ThirdPartyService** | Node.js | Simulated external integrations |
-| **ContentCreator** | Python | Background data seeder |
-| **Headless load generator** | Node.js | Synthetic load (Playwright) |
-| **FlagController** | OpenFeature / flagd | Feature flag management |
-| **RabbitMQ** | RabbitMQ | Async messaging between services |
-| **MSSQL** | Microsoft SQL Server | Relational database |
+<p align="center">
+  <img src="img/easytrade-architecture.png" alt="EasyTrade Architecture" width="600">
+</p>
 
 ### Architecture diagram
 
