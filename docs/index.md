@@ -21,7 +21,7 @@ EasyTrade is a polyglot microservices application that simulates a financial tra
 ### Services and technology stack
 
 <p align="center">
-  <img src="img/easytrade-architecture.png" alt="EasyTrade Architecture" width="600">
+  <img src="./img/easytrade-architecture.png" alt="EasyTrade Architecture" width="600">
 </p>
 
 ### Architecture diagram
