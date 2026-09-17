@@ -168,6 +168,44 @@ Sort by timestamp, descending.
 !!! tip "Dashboard variables"
     For a production-grade dashboard, consider adding **Dashboard variables** for cluster name and namespace. This lets viewers switch between clusters without editing the tiles.
 
+---
+
+## Advanced — Import the Data Layer Overview Dashboard
+
+!!! info "Going further with DQL"
+    Already comfortable with the basics? Skip the manual tile setup and import a production-ready dashboard that showcases more advanced DQL patterns — multi-source joins, funnel analysis, and cross-entity correlations.
+
+### Step 1 — Download the dashboard JSON
+
+The dashboard is available as a pre-built JSON file in this repository:
+
+📄 **`docs/dashboard/Simply_smarter-Data_Layer_Overview.json`**
+
+Download or clone the file to your local machine.
+
+### Step 2 — Upload to Dynatrace
+
+1. In Dynatrace, navigate to **Dashboards** (left navigation).
+2. Click the **"Upload"** button (or the **three-dot menu** `...` > **Upload dashboard**).
+3. Select the downloaded file: `Simply_smarter-Data_Layer_Overview.json`
+4. Click **Open / Upload**.
+
+The dashboard is imported instantly and opens automatically.
+
+!!! tip "Finding the Upload button"
+    If you do not see an **Upload** button on the Dashboards list page, click the **⋮** (more options) icon in the top-right corner of the Dashboards screen — **Upload dashboard** appears in the dropdown.
+
+### Step 3 — Explore the advanced DQL tiles
+
+Once imported, click **Edit** on any tile to inspect the underlying DQL. Use it as a reference for:
+
+| Pattern | What to look for |
+|---------|-----------------|
+| Multi-entity joins | `lookup` and `join` across entity types |
+| Funnel analysis | Chained `filter` + `summarize` on spans |
+| Cross-signal correlation | Combining logs, metrics, and traces in a single query |
+| Conditional colouring | `threshold` rules tied to DQL field values |
+
 <div class="grid cards" markdown>
 - [Cleanup :octicons-arrow-right-24:](cleanup.md)
 </div>
