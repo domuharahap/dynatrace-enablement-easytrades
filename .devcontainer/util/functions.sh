@@ -2750,6 +2750,13 @@ undeployUnguard() {
   kubectl delete ns unguard --force
 }
 
+undeployEasytrade() {
+
+  printInfoSection "Undeploying EasyTrade"
+  helm uninstall easytrade -n easytrade
+  kubectl delete namespace easytrade
+}
+
 deployOpentelemetryDemo(){
   # Deploys the CNCF OpenTelemetry Demo (upstream, community-maintained)
   # https://opentelemetry.io/docs/demo/kubernetes-deployment/
