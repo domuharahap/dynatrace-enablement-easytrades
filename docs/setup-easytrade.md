@@ -53,37 +53,19 @@ Press `Ctrl+C` once all pods are `Running`.
 
 ---
 
-## Step 5 — Feature Flag service (flagd)
-
-EasyTrade uses [OpenFeature](https://openfeature.dev/){target=_blank} with **flagd** as the backend. The `easytrade-feature-flag-service` deployment is already included in the manifests you applied above.
-
-The flag service exposes a REST API on port **8080** inside the cluster and a UI accessible through the EasyTrade frontend (wrench icon in the navbar).
-
-Verify the flag service is running:
-
-```bash
-kubectl get svc easytrade-feature-flag-service -n easytrade
-```
-
----
-
 ## Step 6 — Get the EasyTrade external URL & Verify EasyTrade in the browser
 
-The `EXTERNAL-IP` of the codespace available under the `View > Port`. Click the world icon or link to open in your browser. You should see the EasyTrade trading dashboard with:
+The `EXTERNAL-IP` of the codespace available under the `View > Port`. Click the world icon or link to open in your browser. You should direct into the login page of EasyTrade trading dashboard with:
 
-- A header showing the EasyTrade logo and navigation
-- A list of available trading instruments
-- A **wrench icon** (🔧) in the top-right of the navbar — this opens the Feature Flags panel
-
-!!! tip "Feature Flags panel"
-    The wrench icon is the key tool for injecting failures in this workshop. Click it to open a panel listing all available feature flags. Each flag has a name, description, toggle switch, and Save button. Flags take effect within 30–60 seconds of being enabled.
-
+- A login page showing the EasyTrade
+- Do Register or login as Default User
+- Validate that you can login to the Easytrade Applications
 ---
 
 ## Step 8 — Confirm Dynatrace sees EasyTrade
 
 1. Open your Dynatrace tenant
-2. Navigate to **Infrastructure > Kubernetes > Explorer**
+2. Navigate to **Infrastructure Observability > Kubernetes > Explorer**
 3. Filter by your cluster name
 4. Select the `easytrade` namespace
 5. Confirm all workloads are shown as `Healthy`

@@ -2702,10 +2702,8 @@ deployEasyTrade() {
     return 1
   fi
 
-  kubectl create namespace easytrade 2>/dev/null || true
-
   printInfo "Deploying easytrade manifests"
-  kubectl apply -f $FRAMEWORK_APPS_PATH/easytrade/manifests -n easytrade
+  helm install easytrade oci://europe-docker.pkg.dev/dynatrace-demoability/helm/easytrade --create-namespace --namespace easytrade
 
   printInfo "Waiting for all pods to start"
   waitForAllPods easytrade
