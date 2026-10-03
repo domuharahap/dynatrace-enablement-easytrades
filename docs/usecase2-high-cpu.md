@@ -127,6 +127,39 @@ Disable the feature flag to stop the CPU injection and restore the original CPU 
 
 The Kubernetes CPU limit will be restored to `600m` within 30–60 seconds of disabling the flag. Response times should return to baseline within 3–5 minutes.
 
+---
+
+## Knowledge check
+
+Try to answer each question yourself first, then click the answer to expand it.
+
+### Question 1 — Why is the slowdown worse than the CPU loop alone?
+
+BrokerService response time went from ~6 s to 40 s+. The CPU usage chart shows ~300 mcore, which looks modest. Why is the degradation so severe, and which two charts/events prove it?
+
+??? success "Show answer"
+    Two things happen at once: the CPU-intensive loop consumes CPU, **and** the Kubernetes CPU limit for `broker-service` is cut from `600m` to `300m`. Once usage hits the new 300m limit, the Linux CFS scheduler **throttles** the container. It does not crash or restart, it just runs slower, so every request waits longer.
+
+    **Evidence:**
+
+    1. **Services > BrokerService > Infrastructure** — the **CPU throttling** chart rises steeply right after the limit change, and CPU usage flat-lines at the 300m ceiling.
+    2. The **event annotation** / **Deployment events** entry: `Workload spec change detected — Field 'cpu' in 'resources/limits' for container 'broker-service' changed from '600m' to '300m'`.
+
+    **Takeaway:** CPU *usage* alone can look acceptable while the container is heavily throttled. Always check throttling together with usage.
+
+### Question 2 — Hands-on: find all problems related to this change
+
+Without opening the Problems app, how can you find the log entries and problems correlated with the CPU event, starting from BrokerService?
+
+??? success "Show answer"
+    1. **Services > Explorer > BrokerService > Logs** tab.
+    2. Set the time range to cover the test (e.g. **Last 5 hours**) and look for the ERROR/WARN volume spike that lines up with the CPU event.
+    3. In the **Recommended queries** panel, click a suggestion such as `Problems P-260842 "Multiple service problems"` or `Problems P-260848 "Response time degradation"`. This runs a query showing every log entry correlated to that problem.
+
+    **Why it works:** Davis AI links the Kubernetes `WorkloadSpecChange` event to the performance degradation automatically, so the CPU limit change appears as a contributing factor on the problem without manual correlation.
+
+    **Remediation:** disable the `high_cpu_usage` flag. The CPU limit returns to `600m` in 30–60 s and response times recover in 3–5 minutes.
+
 <div class="grid cards" markdown>
 - [6. Use Case 3 — Dashboarding :octicons-arrow-right-24:](usecase3-dashboarding.md)
 </div>

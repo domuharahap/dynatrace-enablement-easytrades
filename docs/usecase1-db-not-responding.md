@@ -212,6 +212,43 @@ Disable the feature flag to stop the failure injection:
 
 Wait 2–3 minutes for Dynatrace to detect recovery and close the problem automatically.
 
+---
+
+## Knowledge check
+
+Try to answer each question yourself first, then click the answer to expand it.
+
+### Question 1 — Which service is the root cause?
+
+In the problem card, three services are listed as impacted: `:8080`, `BrokerService` and `TradeManagement`. Users only see failures on `:8080`, and `BrokerService` shows the slowdown. Why does Davis AI name **TradeManagement** as the root cause, and how can you confirm it yourself from the Services view?
+
+??? success "Show answer"
+    **Why:** Davis AI follows the service call chain (`:8080` → `BrokerService` → `TradeManagement`) and looks for the **deepest** service that is anomalous. Failures in `:8080` and `BrokerService` are *propagated* symptoms — they fail only because the downstream database call fails. TradeManagement is the last link where the error originates (24.42% error rate).
+
+    **How to confirm manually:**
+
+    1. **Services > Explorer** > select **BrokerService**.
+    2. Open **Database queries** and sort by errors. The `INSERT INTO ...` statement has hundreds of errors with a fast response time (~3 ms) — it fails immediately rather than timing out.
+    3. Click the query to see the error message: `Cannot insert explicit value for identity column ... IDENTITY_INSERT is set to OFF`.
+
+    **Rule of thumb:** the root cause is the point where errors *originate*, not where they are *most visible*.
+
+### Question 2 — Navigate from a 503 to the exact exception
+
+A support engineer only has a customer complaint: *"my sell trade returned 503 Service Unavailable"*. Starting from the **Problems** app, list the navigation path to reach the SQL exception and its stack trace. What advantage does this have over reading logs?
+
+??? success "Show answer"
+    **Navigation path:**
+
+    1. **Problems** > open the problem **"Multiple service problems"** (e.g. `P-26094070`).
+    2. Open the **Logs** tab > filter **"Show last 100 error and warning logs"**. Entries from `broker-service` / `EasyTrade.BrokerService.BrokerDbContext` show *"Error while saving changes"*.
+    3. Click **View trace** on an error log. The root span is `/broker-service/v1/trade/71 → 503`.
+    4. In the trace, open the **Exceptions** tab. The top exception is `Microsoft.Data.SqlClient.SqlException: Cannot insert explicit value for identity column in table 'Trades' when IDENTITY_INSERT is set to OFF`.
+
+    **Advantage:** logs, spans and exceptions are linked by the same trace ID, so you jump from a log line to the full request waterfall and the exception in a few clicks. With plain logs you would search each service separately and correlate timestamps manually. The trace also shows the deployment release version (`1.5.9`), which tells you which build to look at.
+
+    **Remediation:** disable the `db_not_responding` feature flag and wait for the problem to close.
+
 <div class="grid cards" markdown>
 - [5. Use Case 2 — High CPU Usage :octicons-arrow-right-24:](usecase2-high-cpu.md)
 </div>

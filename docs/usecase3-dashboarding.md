@@ -170,6 +170,50 @@ Sort by timestamp, descending.
 
 ---
 
+## Knowledge check
+
+Try each hands-on exercise yourself first, then click the answer to expand it. Add each as a new tile on your **Day 1 - dashboard**.
+
+### Exercise 1 — Count of problems per status
+
+Add a DQL tile that shows how many problems exist per `event.status` (for example `ACTIVE` vs `CLOSED`) as a bar chart. Only count records that have a `display_id`, like Tile #5.
+
+??? success "Show answer"
+    1. **+** > **DQL**, title `Problems by status`.
+    2. Query:
+        ```dql
+        fetch events
+        | filter event.kind == "DAVIS_PROBLEM" and isNotNull(display_id)
+        | summarize count = count(), by: {event.status}
+        ```
+    3. **Run**, then set **Visual configuration** to **Bar chart**.
+
+    **Why:** `fetch events` with `event.kind == "DAVIS_PROBLEM"` returns Davis problem events. `isNotNull(display_id)` drops internal events without a user-visible Problem ID, and `summarize ... by:` groups them per status.
+
+    The exact fields can vary with your Dynatrace version. If the query returns nothing, use the Tile #5 prompt, click **View query**, and adapt the generated DQL.
+
+### Exercise 2 — Find the worst workload for errors in the last 2 hours
+
+Tile #3 shows errors per workload using the Logs UI builder. Rebuild it in DQL, limited to the last 2 hours, sorted with the noisiest workload first, top 5 only. How does this help after the Use Case 1 injection?
+
+??? success "Show answer"
+    1. **+** > **DQL**, title `Top 5 error workloads (2h)`.
+    2. Query:
+        ```dql
+        fetch logs, from: now() - 2h
+        | filter loglevel == "ERROR"
+        | summarize errors = count(), by: {dt.kubernetes.workload.name}
+        | sort errors desc
+        | limit 5
+        ```
+    3. **Run**, then choose **Table** or **Bar chart**.
+
+    **Reading the result:** while `db_not_responding` is enabled, `easytrade-broker-service` should be at or near the top, matching the `EasyTrade.BrokerService.BrokerDbContext` errors from Use Case 1. The dashboard points you at the failing workload before you open a single problem.
+
+    **Tip:** if the `loglevel` field is not populated in your environment, filter on `status == "ERROR"` as in Tile #3.
+
+---
+
 ## Advanced — Import the Data Layer Overview Dashboard
 
 !!! info "Going further with DQL"
