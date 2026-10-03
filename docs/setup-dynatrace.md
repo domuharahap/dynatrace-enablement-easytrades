@@ -14,6 +14,8 @@ We have simplify the Dynatrace agent installation for kubernetes instrumentation
 dynatraceDeployOperator
 ```
 
+![deployedOperator](./img/deployedOperator.png)
+
 Verify the Operator pod is running:
 
 ```bash
