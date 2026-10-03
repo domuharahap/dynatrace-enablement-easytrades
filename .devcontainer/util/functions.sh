@@ -2708,7 +2708,7 @@ deployEasyTrade() {
   printInfo "Waiting for all pods to start"
   waitForAllPods easytrade
 
-  registerApp "easytrade" "easytrade" "frontendreverseproxy-easytrade" 80
+  registerApp "easytrade" "easytrade" "easytrade-frontendreverseproxy" 8080
 }
 
 
